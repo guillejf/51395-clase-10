@@ -4,7 +4,10 @@ import path from "path";
 import { petsRouter } from "./routes/pets.router.js";
 import { productsRouter } from "./routes/products.router.js";
 import { testPlantillaProducts } from "./routes/test-plantilla-products.router.js";
+import { testSocketRouter } from "./routes/test-socket.router.js";
+
 import { __dirname } from "./utils.js";
+import { Server } from "socket.io";
 
 const app = express();
 const PORT = 8080;
@@ -19,9 +22,11 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
   console.log(`Example app listening http://localhost:${PORT}`);
 });
+
+const socketServer = new Server(httpServer);
 
 //TODOS MIS ENDPOINTS TIPO API REST/JSON
 app.use("/api/products", productsRouter);
@@ -29,6 +34,9 @@ app.use("/api/pets", petsRouter);
 
 //QUIERO DEVOLVER HTML DIRECTO PAGINA COMPLETA ARMADA EN EL BACK
 app.use("/test-plantilla-products", testPlantillaProducts);
+
+//QUIERO DEVOLVER HTML DIRECTO PAGINA COMPLETA ARMADA EN EL BACK
+app.use("/test-socket", testSocketRouter);
 
 //OTROS ENDPOINTS
 app.get("*", (req, res) => {
