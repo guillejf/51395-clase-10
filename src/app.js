@@ -28,6 +28,21 @@ const httpServer = app.listen(PORT, () => {
 
 const socketServer = new Server(httpServer);
 
+socketServer.on("connection", (socket) => {
+  //BACK MANDA MSGS AL FRONT
+  setInterval(() => {
+    socket.emit("msg_back_front", {
+      msg: "hola mundo desde el back " + Date.now(),
+      from: "server",
+    });
+  }, 1000);
+
+  //BACK ATAJA LOS MSGS DEL FRONT
+  socket.on("msg_front_back", (msg) => {
+    console.log(msg);
+  });
+});
+
 //TODOS MIS ENDPOINTS TIPO API REST/JSON
 app.use("/api/products", productsRouter);
 app.use("/api/pets", petsRouter);
