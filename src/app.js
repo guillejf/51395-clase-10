@@ -35,6 +35,7 @@ socketServer.on("connection", (socket) => {
       msg: "hola mundo desde el back " + Date.now(),
       from: "server",
     });
+    socketServer.emit();
   }, 1000);
 
   //BACK ATAJA LOS MSGS DEL FRONT
